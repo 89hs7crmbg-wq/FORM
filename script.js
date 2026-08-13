@@ -1,309 +1,262 @@
-/* =========================================================
-   FORMA
-   INTERACTIONS
-   ========================================================= */
+const loader = document.getElementById("loader");
+const hero = document.querySelector(".hero");
+
+const menu = document.getElementById("menu");
+const menuToggle = document.getElementById("menuToggle");
+const menuClose = document.getElementById("menuClose");
+
+const modal = document.getElementById("modal");
+const openModal = document.getElementById("openModal");
+const modalClose = document.getElementById("modalClose");
+
+const floatingCta = document.getElementById("floatingCta");
+const ctaClose = document.getElementById("ctaClose");
 
 
-/* =========================================================
-   MODAL
-   ========================================================= */
+/* LOADER */
 
-const modal = document.getElementById("projectModal");
+window.addEventListener("load", () => {
 
-const openButtons = document.querySelectorAll("[data-open-modal]");
-const closeButtons = document.querySelectorAll("[data-close-modal]");
+  setTimeout(() => {
+
+    loader.classList.add("done");
+
+    hero.classList.add("loaded");
+
+  }, 1500);
+
+});
 
 
-function openModal() {
-    if (!modal) return;
+/* MENU */
 
-    modal.classList.add("is-open");
-    modal.setAttribute("aria-hidden", "false");
+menuToggle.addEventListener("click", () => {
 
-    document.body.style.overflow = "hidden";
-}
+  menu.classList.add("open");
 
+  document.body.classList.add("lock");
+
+});
+
+
+menuClose.addEventListener("click", () => {
+
+  menu.classList.remove("open");
+
+  document.body.classList.remove("lock");
+
+});
+
+
+document.querySelectorAll(".menu nav a").forEach(link => {
+
+  link.addEventListener("click", () => {
+
+    menu.classList.remove("open");
+
+    document.body.classList.remove("lock");
+
+  });
+
+});
+
+
+/* MODAL */
 
 function closeModal() {
-    if (!modal) return;
 
-    modal.classList.remove("is-open");
-    modal.setAttribute("aria-hidden", "true");
+  modal.classList.remove("open");
 
-    document.body.style.overflow = "";
+  document.body.classList.remove("lock");
+
 }
 
 
-openButtons.forEach((button) => {
-    button.addEventListener("click", openModal);
+openModal.addEventListener("click", () => {
+
+  modal.classList.add("open");
+
+  document.body.classList.add("lock");
+
 });
 
 
-closeButtons.forEach((button) => {
-    button.addEventListener("click", closeModal);
+modalClose.addEventListener("click", closeModal);
+
+
+modal.addEventListener("click", event => {
+
+  if (event.target === modal) {
+    closeModal();
+  }
+
 });
 
 
-/* Закрытие по Escape */
+/* ESC */
 
-document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-        closeModal();
-    }
+document.addEventListener("keydown", event => {
+
+  if (event.key === "Escape") {
+
+    menu.classList.remove("open");
+
+    closeModal();
+
+    document.body.classList.remove("lock");
+
+  }
+
 });
 
 
-/* =========================================================
-   SCROLL REVEAL
-   ========================================================= */
+/* REVEAL */
 
 const revealElements = document.querySelectorAll(
-    ".section-label, " +
-    ".intro-content, " +
-    ".project, " +
-    ".section-heading, " +
-    ".philosophy-content, " +
-    ".materials-image, " +
-    ".studio-layout, " +
-    ".contacts-content"
+  ".principle-grid, .project, .split-project, .materials-top, .material-image, .studio-content, .atmosphere-copy, .contact-main"
 );
 
+revealElements.forEach(element => {
 
-revealElements.forEach((element) => {
-    element.classList.add("reveal");
+  element.classList.add("reveal");
+
 });
 
 
 const revealObserver = new IntersectionObserver(
-    (entries, observer) => {
+  entries => {
 
-        entries.forEach((entry) => {
+    entries.forEach(entry => {
 
-            if (!entry.isIntersecting) {
-                return;
-            }
+      if (entry.isIntersecting) {
 
-            entry.target.classList.add("visible");
+        entry.target.classList.add("visible");
 
-            observer.unobserve(entry.target);
+        revealObserver.unobserve(entry.target);
 
-        });
+      }
 
-    },
-    {
-        threshold: 0.12
-    }
+    });
+
+  },
+  {
+    threshold: 0.12
+  }
 );
 
 
-revealElements.forEach((element) => {
-    revealObserver.observe(element);
+revealElements.forEach(element => {
+
+  revealObserver.observe(element);
+
 });
 
 
-/* =========================================================
-   HEADER VISIBILITY
-   ========================================================= */
+/* FLOATING CTA */
 
-const header = document.querySelector(".header");
+let ctaShown = false;
 
-let lastScrollPosition = window.scrollY;
+function showCTA() {
+
+  if (ctaShown) return;
+
+  if (sessionStorage.getItem("formaWebCtaClosed")) {
+    return;
+  }
+
+  if (window.scrollY < window.innerHeight * 0.65) {
+    return;
+  }
+
+  floatingCta.classList.add("show");
+
+  ctaShown = true;
+
+}
+
+
+setTimeout(showCTA, 9000);
 
 
 window.addEventListener(
-    "scroll",
-    () => {
+  "scroll",
+  () => {
 
-        const currentScrollPosition = window.scrollY;
-
-        if (!header) return;
-
-
-        if (currentScrollPosition > lastScrollPosition && currentScrollPosition > 150) {
-
-            header.style.transform = "translateY(-100%)";
-
-        } else {
-
-            header.style.transform = "translateY(0)";
-
-        }
-
-
-        lastScrollPosition = currentScrollPosition;
-
-    },
-    {
-        passive: true
-    }
-);
-
-
-/* =========================================================
-   SMOOTH ANCHOR SCROLL
-   ========================================================= */
-
-const navigationLinks = document.querySelectorAll(
-    'a[href^="#"]'
-);
-
-
-navigationLinks.forEach((link) => {
-
-    link.addEventListener("click", (event) => {
-
-        const targetId = link.getAttribute("href");
-
-        if (!targetId || targetId === "#") {
-            return;
-        }
-
-        const target = document.querySelector(targetId);
-
-        if (!target) {
-            return;
-        }
-
-        event.preventDefault();
-
-        target.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-
-    });
-
-});
-
-
-/* =========================================================
-   IMAGE LOAD EFFECT
-   ========================================================= */
-
-const images = document.querySelectorAll("img");
-
-
-images.forEach((image) => {
-
-    if (image.complete) {
-        image.classList.add("loaded");
-        return;
+    if (window.scrollY > window.innerHeight * 0.65) {
+      showCTA();
     }
 
+    /* IMAGE PARALLAX */
 
-    image.addEventListener("load", () => {
-        image.classList.add("loaded");
-    });
-
-});
-
-
-/* =========================================================
-   PROJECT IMAGE PARALLAX
-   ========================================================= */
-
-const projectImages = document.querySelectorAll(
-    ".project-image img"
-);
-
-
-function updateParallax() {
+    const images = document.querySelectorAll(
+      ".project-image img, .split-image img, .material-image img"
+    );
 
     const viewportHeight = window.innerHeight;
 
+    images.forEach(image => {
 
-    projectImages.forEach((image) => {
+      const parent = image.parentElement;
 
-        const rect = image.getBoundingClientRect();
+      const rect = parent.getBoundingClientRect();
 
-        if (
-            rect.bottom < 0 ||
-            rect.top > viewportHeight
-        ) {
-            return;
-        }
+      if (
+        rect.bottom > 0 &&
+        rect.top < viewportHeight
+      ) {
 
-
-        const center =
-            rect.top + rect.height / 2;
-
-        const distance =
-            center - viewportHeight / 2;
+        const progress =
+          (viewportHeight - rect.top) /
+          (viewportHeight + rect.height);
 
         const movement =
-            distance * -0.015;
-
+          (progress - 0.5) * 22;
 
         image.style.transform =
-            `translateY(${movement}px) scale(1.02)`;
+          `scale(1.035) translateY(${movement}px)`;
+
+      }
 
     });
 
-}
-
-
-window.addEventListener(
-    "scroll",
-    updateParallax,
-    {
-        passive: true
-    }
+  },
+  {
+    passive: true
+  }
 );
 
 
-/* =========================================================
-   MODAL BUTTON LINK
-   ========================================================= */
+ctaClose.addEventListener("click", () => {
 
-const modalVkButton = document.querySelector(
-    ".modal-button"
-);
+  floatingCta.classList.remove("show");
 
+  sessionStorage.setItem(
+    "formaWebCtaClosed",
+    "true"
+  );
 
-if (modalVkButton) {
-
-    modalVkButton.addEventListener(
-        "click",
-        () => {
-            closeModal();
-        }
-    );
-
-}
+});
 
 
-/* =========================================================
-   PREVENT MODAL WINDOW CLICK FROM CLOSING
-   ========================================================= */
+/* SMOOTH NAVIGATION */
 
-const modalWindow = document.querySelector(
-    ".modal-window"
-);
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
+  anchor.addEventListener("click", event => {
 
-if (modalWindow) {
+    const target =
+      document.querySelector(
+        anchor.getAttribute("href")
+      );
 
-    modalWindow.addEventListener(
-        "click",
-        (event) => {
-            event.stopPropagation();
-        }
-    );
+    if (!target) return;
 
-}
+    event.preventDefault();
 
+    target.scrollIntoView({
+      behavior: "smooth"
+    });
 
-/* =========================================================
-   INITIAL STATE
-   ========================================================= */
+  });
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        document.body.classList.add("page-loaded");
-
-        updateParallax();
-
-    }
-);
+});
