@@ -1,351 +1,350 @@
-const loader = document.getElementById("loader");
-const hero = document.querySelector(".hero");
+document.addEventListener("DOMContentLoaded", () => {
 
-const menu = document.getElementById("menu");
-const menuToggle = document.getElementById("menuToggle");
-const menuClose = document.getElementById("menuClose");
+    /*
+    ============================================
+    LOADER
+    ============================================
+    */
 
-const modal = document.getElementById("modal");
-const openModal = document.getElementById("openModal");
-const modalClose = document.getElementById("modalClose");
+    const loader = document.getElementById("loader");
 
-const floatingCta = document.getElementById("floatingCta");
-const ctaClose = document.getElementById("ctaClose");
+    document.body.classList.add("loading");
 
+    let loaderFinished = false;
 
-/* =========================================
-   LOADER
-========================================= */
+    function finishLoader() {
 
-function finishLoader() {
-  if (!loader) return;
+        if (loaderFinished) return;
 
-  loader.classList.add("done");
+        loaderFinished = true;
 
-  if (hero) {
-    hero.classList.add("loaded");
-  }
-}
+        setTimeout(() => {
 
-/*
-  Не ждём полной загрузки всех изображений.
-  GitHub Pages иногда любит напоминать,
-  что интернет всё ещё существует.
-*/
+            loader.classList.add("is-hidden");
+            document.body.classList.remove("loading");
 
-setTimeout(finishLoader, 1800);
-
-window.addEventListener("load", () => {
-  setTimeout(finishLoader, 300);
-});
-
-
-/* =========================================
-   MENU
-========================================= */
-
-if (menuToggle && menu) {
-
-  menuToggle.addEventListener("click", () => {
-    menu.classList.add("open");
-    document.body.classList.add("lock");
-  });
-
-}
-
-
-if (menuClose && menu) {
-
-  menuClose.addEventListener("click", () => {
-    menu.classList.remove("open");
-    document.body.classList.remove("lock");
-  });
-
-}
-
-
-document.querySelectorAll(".menu nav a").forEach(link => {
-
-  link.addEventListener("click", () => {
-
-    menu.classList.remove("open");
-    document.body.classList.remove("lock");
-
-  });
-
-});
-
-
-/* =========================================
-   MODAL
-========================================= */
-
-function closeModal() {
-
-  if (!modal) return;
-
-  modal.classList.remove("open");
-  document.body.classList.remove("lock");
-
-}
-
-
-if (openModal && modal) {
-
-  openModal.addEventListener("click", () => {
-
-    modal.classList.add("open");
-    document.body.classList.add("lock");
-
-  });
-
-}
-
-
-if (modalClose) {
-  modalClose.addEventListener("click", closeModal);
-}
-
-
-if (modal) {
-
-  modal.addEventListener("click", event => {
-
-    if (event.target === modal) {
-      closeModal();
+        }, 350);
     }
 
-  });
+    window.addEventListener("load", finishLoader);
 
-}
+    /*
+    Fallback.
+    Если какое-то изображение решит провести
+    самостоятельную забастовку, сайт всё равно
+    должен открыться.
+    */
 
-
-/* =========================================
-   ESC
-========================================= */
-
-document.addEventListener("keydown", event => {
-
-  if (event.key !== "Escape") return;
-
-  if (menu) {
-    menu.classList.remove("open");
-  }
-
-  closeModal();
-
-  document.body.classList.remove("lock");
-
-});
+    setTimeout(finishLoader, 2600);
 
 
-/* =========================================
-   REVEAL ANIMATIONS
-========================================= */
+    /*
+    ============================================
+    CUSTOM CURSOR
+    ============================================
+    */
 
-const revealElements = document.querySelectorAll(
-  ".principle-grid, .project, .split-project, .materials-top, .material-image, .studio-content, .atmosphere-copy, .contact-main"
-);
+    const cursor = document.getElementById("cursor");
 
+    if (cursor && window.matchMedia("(pointer: fine)").matches) {
 
-revealElements.forEach(element => {
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
 
-  element.classList.add("reveal");
+        let currentX = mouseX;
+        let currentY = mouseY;
 
-});
+        window.addEventListener("mousemove", (event) => {
 
+            mouseX = event.clientX;
+            mouseY = event.clientY;
 
-if ("IntersectionObserver" in window) {
+        });
 
-  const revealObserver = new IntersectionObserver(
-    entries => {
+        function updateCursor() {
 
-      entries.forEach(entry => {
+            currentX += (mouseX - currentX) * 0.18;
+            currentY += (mouseY - currentY) * 0.18;
 
-        if (!entry.isIntersecting) return;
+            cursor.style.left = `${currentX}px`;
+            cursor.style.top = `${currentY}px`;
 
-        entry.target.classList.add("visible");
+            requestAnimationFrame(updateCursor);
 
-        revealObserver.unobserve(entry.target);
+        }
 
-      });
-
-    },
-    {
-      threshold: 0.08
-    }
-  );
-
-
-  revealElements.forEach(element => {
-
-    revealObserver.observe(element);
-
-  });
-
-} else {
-
-  revealElements.forEach(element => {
-
-    element.classList.add("visible");
-
-  });
-
-}
+        updateCursor();
 
 
-/* =========================================
-   FLOATING CTA
-========================================= */
+        const hoverTargets = document.querySelectorAll(
+            "a, button, .project__visual, .materials__scene"
+        );
 
-let ctaShown = false;
+        hoverTargets.forEach((element) => {
 
+            element.addEventListener("mouseenter", () => {
+                cursor.classList.add("is-hover");
+            });
 
-function showCTA() {
+            element.addEventListener("mouseleave", () => {
+                cursor.classList.remove("is-hover");
+            });
 
-  if (!floatingCta || ctaShown) return;
+        });
 
-  try {
-
-    if (sessionStorage.getItem("formaWebCtaClosed")) {
-      return;
-    }
-
-  } catch (error) {
-    // Если браузер запретил sessionStorage,
-    // просто продолжаем работу сайта.
-  }
-
-
-  if (window.scrollY < window.innerHeight * 0.65) {
-    return;
-  }
-
-
-  floatingCta.classList.add("show");
-
-  ctaShown = true;
-
-}
-
-
-setTimeout(showCTA, 9000);
-
-
-window.addEventListener(
-  "scroll",
-  () => {
-
-    if (window.scrollY > window.innerHeight * 0.65) {
-      showCTA();
     }
 
 
-    /* =====================================
-       IMAGE PARALLAX
-    ===================================== */
+    /*
+    ============================================
+    SMOOTH INTERNAL LINKS
+    ============================================
+    */
 
-    const images = document.querySelectorAll(
-      ".project-image img, .split-image img, .material-image img"
+    const links = document.querySelectorAll('a[href^="#"]');
+
+    links.forEach((link) => {
+
+        link.addEventListener("click", (event) => {
+
+            const targetId = link.getAttribute("href");
+
+            if (!targetId || targetId === "#") return;
+
+            const target = document.querySelector(targetId);
+
+            if (!target) return;
+
+            event.preventDefault();
+
+            target.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+        });
+
+    });
+
+
+    /*
+    ============================================
+    REVEAL ELEMENTS
+    ============================================
+    */
+
+    const revealElements = document.querySelectorAll(
+        ".project__info, .detail-text, .materials__header, .studio__content, .contact__content"
     );
 
-
-    const viewportHeight = window.innerHeight;
-
-
-    images.forEach(image => {
-
-      const parent = image.parentElement;
-
-      if (!parent) return;
-
-
-      const rect = parent.getBoundingClientRect();
-
-
-      if (
-        rect.bottom <= 0 ||
-        rect.top >= viewportHeight
-      ) {
-        return;
-      }
-
-
-      const progress =
-        (viewportHeight - rect.top) /
-        (viewportHeight + rect.height);
-
-
-      const movement =
-        (progress - 0.5) * 18;
-
-
-      image.style.transform =
-        `scale(1.035) translateY(${movement}px)`;
-
+    revealElements.forEach((element) => {
+        element.classList.add("reveal");
     });
 
-  },
-  {
-    passive: true
-  }
-);
+    const revealObserver = new IntersectionObserver(
+        (entries) => {
+
+            entries.forEach((entry) => {
+
+                if (entry.isIntersecting) {
+
+                    entry.target.classList.add("is-visible");
+
+                    revealObserver.unobserve(entry.target);
+
+                }
+
+            });
+
+        },
+        {
+            threshold: 0.12
+        }
+    );
+
+    revealElements.forEach((element) => {
+        revealObserver.observe(element);
+    });
 
 
-/* =========================================
-   CLOSE FLOATING CTA
-========================================= */
+    /*
+    ============================================
+    PARALLAX
+    ============================================
+    */
 
-if (ctaClose && floatingCta) {
+    const parallaxImages = document.querySelectorAll(
+        ".project__visual img, .detail-image img, .house-experience__image img, .materials__scene img"
+    );
 
-  ctaClose.addEventListener("click", () => {
+    function updateParallax() {
 
-    floatingCta.classList.remove("show");
+        const viewportHeight = window.innerHeight;
 
-    try {
+        parallaxImages.forEach((image) => {
 
-      sessionStorage.setItem(
-        "formaWebCtaClosed",
-        "true"
-      );
+            const rect = image.getBoundingClientRect();
 
-    } catch (error) {
-      // Ничего страшного.
+            if (
+                rect.bottom < 0 ||
+                rect.top > viewportHeight
+            ) {
+                return;
+            }
+
+            const center = rect.top + rect.height / 2;
+            const distance = center - viewportHeight / 2;
+
+            const movement = distance * -0.025;
+
+            image.style.transform =
+                `translateY(${movement}px) scale(1.025)`;
+
+        });
+
     }
 
-  });
+    let parallaxTicking = false;
 
-}
+    window.addEventListener("scroll", () => {
 
+        if (!parallaxTicking) {
 
-/* =========================================
-   SMOOTH NAVIGATION
-========================================= */
+            window.requestAnimationFrame(() => {
 
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                updateParallax();
 
-  anchor.addEventListener("click", event => {
+                parallaxTicking = false;
 
-    const href = anchor.getAttribute("href");
+            });
 
-    if (!href || href === "#") return;
+            parallaxTicking = true;
+        }
 
-
-    const target =
-      document.querySelector(href);
+    }, { passive: true });
 
 
-    if (!target) return;
+    /*
+    ============================================
+    MATERIAL MARKERS
+    ============================================
+    */
+
+    const materialScene = document.querySelector(".materials__scene");
+
+    if (materialScene) {
+
+        const markers = materialScene.querySelectorAll(".material-marker");
+
+        materialScene.addEventListener("mousemove", (event) => {
+
+            const rect = materialScene.getBoundingClientRect();
+
+            const x = (event.clientX - rect.left) / rect.width;
+            const y = (event.clientY - rect.top) / rect.height;
+
+            markers.forEach((marker, index) => {
+
+                const strength = (index + 1) * 3;
+
+                marker.style.transform =
+                    `translate(${(x - .5) * strength}px, ${(y - .5) * strength}px)`;
+
+            });
+
+        });
+
+        materialScene.addEventListener("mouseleave", () => {
+
+            markers.forEach((marker) => {
+
+                marker.style.transform = "translate(0, 0)";
+
+            });
+
+        });
+
+    }
 
 
-    event.preventDefault();
+    /*
+    ============================================
+    POPUP
+    ============================================
+    */
+
+    const popup = document.getElementById("projectPopup");
+    const popupClose = document.getElementById("popupClose");
+
+    const popupWasClosed =
+        sessionStorage.getItem("formaPopupClosed") === "true";
+
+    if (popup && !popupWasClosed) {
+
+        setTimeout(() => {
+
+            popup.classList.add("is-visible");
+
+        }, 9000);
+
+    }
+
+    if (popupClose && popup) {
+
+        popupClose.addEventListener("click", () => {
+
+            popup.classList.remove("is-visible");
+
+            sessionStorage.setItem(
+                "formaPopupClosed",
+                "true"
+            );
+
+        });
+
+    }
 
 
-    target.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
+    /*
+    ============================================
+    HIDE POPUP WHEN CONTACT IS VISIBLE
+    ============================================
+    */
 
-  });
+    const contactSection = document.querySelector(".contact");
+
+    if (contactSection && popup) {
+
+        const contactObserver = new IntersectionObserver(
+            (entries) => {
+
+                entries.forEach((entry) => {
+
+                    if (entry.isIntersecting) {
+
+                        popup.classList.remove("is-visible");
+
+                    }
+
+                });
+
+            },
+            {
+                threshold: 0.25
+            }
+        );
+
+        contactObserver.observe(contactSection);
+
+    }
+
+
+    /*
+    ============================================
+    INITIAL PARALLAX
+    ============================================
+    */
+
+    updateParallax();
 
 });
