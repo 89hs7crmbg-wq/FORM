@@ -13,39 +13,55 @@ const floatingCta = document.getElementById("floatingCta");
 const ctaClose = document.getElementById("ctaClose");
 
 
-/* LOADER */
+/* =========================================
+   LOADER
+========================================= */
+
+function finishLoader() {
+  if (!loader) return;
+
+  loader.classList.add("done");
+
+  if (hero) {
+    hero.classList.add("loaded");
+  }
+}
+
+/*
+  Не ждём полной загрузки всех изображений.
+  GitHub Pages иногда любит напоминать,
+  что интернет всё ещё существует.
+*/
+
+setTimeout(finishLoader, 1800);
 
 window.addEventListener("load", () => {
-
-  setTimeout(() => {
-
-    loader.classList.add("done");
-
-    hero.classList.add("loaded");
-
-  }, 1500);
-
+  setTimeout(finishLoader, 300);
 });
 
 
-/* MENU */
+/* =========================================
+   MENU
+========================================= */
 
-menuToggle.addEventListener("click", () => {
+if (menuToggle && menu) {
 
-  menu.classList.add("open");
+  menuToggle.addEventListener("click", () => {
+    menu.classList.add("open");
+    document.body.classList.add("lock");
+  });
 
-  document.body.classList.add("lock");
-
-});
+}
 
 
-menuClose.addEventListener("click", () => {
+if (menuClose && menu) {
 
-  menu.classList.remove("open");
+  menuClose.addEventListener("click", () => {
+    menu.classList.remove("open");
+    document.body.classList.remove("lock");
+  });
 
-  document.body.classList.remove("lock");
-
-});
+}
 
 
 document.querySelectorAll(".menu nav a").forEach(link => {
@@ -53,7 +69,6 @@ document.querySelectorAll(".menu nav a").forEach(link => {
   link.addEventListener("click", () => {
 
     menu.classList.remove("open");
-
     document.body.classList.remove("lock");
 
   });
@@ -61,60 +76,77 @@ document.querySelectorAll(".menu nav a").forEach(link => {
 });
 
 
-/* MODAL */
+/* =========================================
+   MODAL
+========================================= */
 
 function closeModal() {
 
-  modal.classList.remove("open");
+  if (!modal) return;
 
+  modal.classList.remove("open");
   document.body.classList.remove("lock");
 
 }
 
 
-openModal.addEventListener("click", () => {
+if (openModal && modal) {
 
-  modal.classList.add("open");
+  openModal.addEventListener("click", () => {
 
-  document.body.classList.add("lock");
+    modal.classList.add("open");
+    document.body.classList.add("lock");
 
-});
+  });
 
-
-modalClose.addEventListener("click", closeModal);
-
-
-modal.addEventListener("click", event => {
-
-  if (event.target === modal) {
-    closeModal();
-  }
-
-});
+}
 
 
-/* ESC */
+if (modalClose) {
+  modalClose.addEventListener("click", closeModal);
+}
+
+
+if (modal) {
+
+  modal.addEventListener("click", event => {
+
+    if (event.target === modal) {
+      closeModal();
+    }
+
+  });
+
+}
+
+
+/* =========================================
+   ESC
+========================================= */
 
 document.addEventListener("keydown", event => {
 
-  if (event.key === "Escape") {
+  if (event.key !== "Escape") return;
 
+  if (menu) {
     menu.classList.remove("open");
-
-    closeModal();
-
-    document.body.classList.remove("lock");
-
   }
+
+  closeModal();
+
+  document.body.classList.remove("lock");
 
 });
 
 
-/* REVEAL */
+/* =========================================
+   REVEAL ANIMATIONS
+========================================= */
 
 const revealElements = document.querySelectorAll(
   ".principle-grid, .project, .split-project, .materials-top, .material-image, .studio-content, .atmosphere-copy, .contact-main"
 );
+
 
 revealElements.forEach(element => {
 
@@ -123,50 +155,72 @@ revealElements.forEach(element => {
 });
 
 
-const revealObserver = new IntersectionObserver(
-  entries => {
+if ("IntersectionObserver" in window) {
 
-    entries.forEach(entry => {
+  const revealObserver = new IntersectionObserver(
+    entries => {
 
-      if (entry.isIntersecting) {
+      entries.forEach(entry => {
+
+        if (!entry.isIntersecting) return;
 
         entry.target.classList.add("visible");
 
         revealObserver.unobserve(entry.target);
 
-      }
+      });
 
-    });
-
-  },
-  {
-    threshold: 0.12
-  }
-);
+    },
+    {
+      threshold: 0.08
+    }
+  );
 
 
-revealElements.forEach(element => {
+  revealElements.forEach(element => {
 
-  revealObserver.observe(element);
+    revealObserver.observe(element);
 
-});
+  });
+
+} else {
+
+  revealElements.forEach(element => {
+
+    element.classList.add("visible");
+
+  });
+
+}
 
 
-/* FLOATING CTA */
+/* =========================================
+   FLOATING CTA
+========================================= */
 
 let ctaShown = false;
 
+
 function showCTA() {
 
-  if (ctaShown) return;
+  if (!floatingCta || ctaShown) return;
 
-  if (sessionStorage.getItem("formaWebCtaClosed")) {
-    return;
+  try {
+
+    if (sessionStorage.getItem("formaWebCtaClosed")) {
+      return;
+    }
+
+  } catch (error) {
+    // Если браузер запретил sessionStorage,
+    // просто продолжаем работу сайта.
   }
+
 
   if (window.scrollY < window.innerHeight * 0.65) {
     return;
   }
+
 
   floatingCta.classList.add("show");
 
@@ -186,36 +240,48 @@ window.addEventListener(
       showCTA();
     }
 
-    /* IMAGE PARALLAX */
+
+    /* =====================================
+       IMAGE PARALLAX
+    ===================================== */
 
     const images = document.querySelectorAll(
       ".project-image img, .split-image img, .material-image img"
     );
 
+
     const viewportHeight = window.innerHeight;
+
 
     images.forEach(image => {
 
       const parent = image.parentElement;
 
+      if (!parent) return;
+
+
       const rect = parent.getBoundingClientRect();
 
+
       if (
-        rect.bottom > 0 &&
-        rect.top < viewportHeight
+        rect.bottom <= 0 ||
+        rect.top >= viewportHeight
       ) {
-
-        const progress =
-          (viewportHeight - rect.top) /
-          (viewportHeight + rect.height);
-
-        const movement =
-          (progress - 0.5) * 22;
-
-        image.style.transform =
-          `scale(1.035) translateY(${movement}px)`;
-
+        return;
       }
+
+
+      const progress =
+        (viewportHeight - rect.top) /
+        (viewportHeight + rect.height);
+
+
+      const movement =
+        (progress - 0.5) * 18;
+
+
+      image.style.transform =
+        `scale(1.035) translateY(${movement}px)`;
 
     });
 
@@ -226,35 +292,58 @@ window.addEventListener(
 );
 
 
-ctaClose.addEventListener("click", () => {
+/* =========================================
+   CLOSE FLOATING CTA
+========================================= */
 
-  floatingCta.classList.remove("show");
+if (ctaClose && floatingCta) {
 
-  sessionStorage.setItem(
-    "formaWebCtaClosed",
-    "true"
-  );
+  ctaClose.addEventListener("click", () => {
 
-});
+    floatingCta.classList.remove("show");
+
+    try {
+
+      sessionStorage.setItem(
+        "formaWebCtaClosed",
+        "true"
+      );
+
+    } catch (error) {
+      // Ничего страшного.
+    }
+
+  });
+
+}
 
 
-/* SMOOTH NAVIGATION */
+/* =========================================
+   SMOOTH NAVIGATION
+========================================= */
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
   anchor.addEventListener("click", event => {
 
+    const href = anchor.getAttribute("href");
+
+    if (!href || href === "#") return;
+
+
     const target =
-      document.querySelector(
-        anchor.getAttribute("href")
-      );
+      document.querySelector(href);
+
 
     if (!target) return;
 
+
     event.preventDefault();
 
+
     target.scrollIntoView({
-      behavior: "smooth"
+      behavior: "smooth",
+      block: "start"
     });
 
   });
