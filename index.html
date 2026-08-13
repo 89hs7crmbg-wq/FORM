@@ -1,609 +1,445 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="FORMA — архитектурное бюро. Сургут.">
-  <title>FORMA — Architecture / Surgut</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FORMA — Архитектура, созданная для жизни</title>
+    <meta name="description" content="FORMA — архитектурное бюро из Сургута. Вымышленный проект AIKharisov.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div class="loader" id="loader">
-    <div class="loader-mark">F</div>
-    <div class="loader-name">FORMA</div>
-    <div class="loader-line"><span></span></div>
-    <div class="loader-meta">ARCHITECTURE · SURGUT · 2026</div>
-  </div>
+    <!-- LOADER -->
+    <div class="loader" id="loader">
+        <div class="loader__mark">
+            <img src="IMG_8735.png" alt="AIKharisov">
+        </div>
 
-  <header class="header">
-    <a class="brand" href="#top">FORMA<span>®</span></a>
+        <div class="loader__line">
+            <span></span>
+        </div>
 
-    <div class="header-center">
-      ARCHITECTURE / SURGUT
+        <div class="loader__meta">
+            <span>FORMA</span>
+            <span>СУРГУТ · 2026</span>
+        </div>
     </div>
 
-    <button class="menu-toggle" id="menuToggle" aria-label="Открыть меню">
-      <span></span>
-      <span></span>
-    </button>
-  </header>
 
-  <div class="menu" id="menu">
-
-    <button class="menu-close" id="menuClose">
-      CLOSE
-    </button>
-
-    <div class="menu-number">
-      FORMA / 2026
-    </div>
-
-    <nav>
-      <a href="#work">
-        <small>01</small>
-        Проекты
-      </a>
-
-      <a href="#principle">
-        <small>02</small>
-        Принцип
-      </a>
-
-      <a href="#materials">
-        <small>03</small>
-        Материалы
-      </a>
-
-      <a href="#studio">
-        <small>04</small>
-        Бюро
-      </a>
-
-      <a href="#contact">
-        <small>05</small>
-        Контакт
-      </a>
-    </nav>
-
-    <div class="menu-bottom">
-      PRIVATE ARCHITECTURE / NORTHERN RUSSIA
-    </div>
-
-  </div>
+    <!-- CUSTOM CURSOR -->
+    <div class="cursor" id="cursor"></div>
 
 
-  <main id="top">
+    <!-- HEADER -->
+    <header class="header">
 
-    <!-- HERO -->
+        <a href="#top" class="brand">
+            <span class="brand__name">FORMA</span>
+            <span class="brand__location">СУРГУТ / RU</span>
+        </a>
 
-    <section class="hero">
+        <nav class="nav">
+            <a href="#projects">Проекты</a>
+            <a href="#studio">Бюро</a>
+            <a href="#contact">Контакт</a>
+        </nav>
 
-      <div class="hero-meta">
-        <span>01 / 05</span>
-        <span>PRIVATE ARCHITECTURE</span>
-      </div>
+        <div class="header__year">2026</div>
 
-      <div class="hero-word">
-        <span>FORMA</span>
-        <i>architecture</i>
-      </div>
+    </header>
 
-      <div class="hero-image">
-        <img src="IMG_8721.png" alt="Villa N">
-      </div>
 
-      <div class="hero-side">
-        <span>СУРГУТ</span>
-        <span>61°15′N</span>
-      </div>
+    <main id="top">
 
-      <div class="hero-bottom">
+        <!-- INTRO -->
+        <section class="intro">
 
-        <div>
-          <span class="eyebrow">
-            VILLA N
-          </span>
+            <div class="intro__background">
+                <img src="IMG_8734.png" alt="Архитектурная атмосфера FORMA">
+            </div>
 
-          <p>
-            Пространство, в котором<br>
-            свет становится материалом.
-          </p>
+            <div class="intro__overlay"></div>
+
+            <div class="intro__content">
+
+                <div class="intro__eyebrow">
+                    АРХИТЕКТУРНОЕ БЮРО
+                    <span>СУРГУТ · РОССИЯ</span>
+                </div>
+
+                <h1>
+                    Пространство<br>
+                    начинается<br>
+                    с <i>формы.</i>
+                </h1>
+
+                <div class="intro__bottom">
+
+                    <p>
+                        Мы создаём архитектуру, в которой
+                        материал, свет и пространство
+                        работают как единое целое.
+                    </p>
+
+                    <div class="intro__scroll">
+                        <span>Исследовать</span>
+                        <div class="scroll-line"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- PROJECT INTRO -->
+        <section class="projects-intro" id="projects">
+
+            <div class="section-index">01 / 03</div>
+
+            <div class="projects-intro__title">
+                <span>ИЗБРАННЫЕ</span>
+                <strong>ПРОЕКТЫ</strong>
+            </div>
+
+            <p>
+                Три разных подхода к одному вопросу:
+                каким должно быть пространство,
+                в котором действительно хочется жить.
+            </p>
+
+        </section>
+
+
+        <!-- PROJECT 01 -->
+        <section class="project project--villa">
+
+            <div class="project__visual project__visual--large">
+                <img src="IMG_8721.png" alt="Villa N — фасад">
+            </div>
+
+            <div class="project__number">01</div>
+
+            <div class="project__info">
+
+                <span class="project__type">ЧАСТНАЯ РЕЗИДЕНЦИЯ</span>
+
+                <h2>Villa N</h2>
+
+                <p>
+                    Монолитная архитектура, известняк,
+                    бетон и тёмное дерево.
+                    Дом выстроен вокруг тишины,
+                    света и северного ландшафта.
+                </p>
+
+                <div class="project__data">
+                    <span>СУРГУТ</span>
+                    <span>2026</span>
+                    <span>420 М²</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- VILLA DETAILS -->
+        <section class="project-details project-details--villa">
+
+            <div class="detail-image detail-image--one">
+                <img src="IMG_8725.png" alt="Villa N — интерьер">
+            </div>
+
+            <div class="detail-text">
+                <span>VILLA N / 01</span>
+                <p>
+                    Внутреннее пространство продолжает
+                    архитектуру фасада: камень, бетон,
+                    дерево и северный свет.
+                </p>
+            </div>
+
+            <div class="detail-image detail-image--two">
+                <img src="IMG_8726.png" alt="Villa N — архитектурная деталь">
+            </div>
+
+        </section>
+
+
+        <!-- PROJECT 02 -->
+        <section class="project project--house">
+
+            <div class="project__visual project__visual--medium">
+                <img src="IMG_8727.png" alt="House M — фасад">
+            </div>
+
+            <div class="project__number">02</div>
+
+            <div class="project__info">
+
+                <span class="project__type">ЗАГОРОДНЫЙ ДОМ</span>
+
+                <h2>House M</h2>
+
+                <p>
+                    Низкий горизонтальный объём,
+                    собранный из нескольких смещённых
+                    архитектурных элементов.
+                </p>
+
+                <div class="project__data">
+                    <span>СУРГУТ</span>
+                    <span>2026</span>
+                    <span>310 М²</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- HOUSE EXPERIENCE -->
+        <section class="house-experience">
+
+            <div class="house-experience__image house-experience__image--interior">
+                <img src="IMG_8728.png" alt="House M — интерьер">
+            </div>
+
+            <div class="house-experience__center">
+                <span>HOUSE M</span>
+                <h3>
+                    Горизонтальная<br>
+                    тишина.
+                </h3>
+            </div>
+
+            <div class="house-experience__image house-experience__image--yard">
+                <img src="IMG_8729.png" alt="House M — двор">
+            </div>
+
+        </section>
+
+
+        <!-- PROJECT 03 -->
+        <section class="project project--residence">
+
+            <div class="project__visual project__visual--portrait">
+
+                <img src="IMG_8730.png" alt="Residence 04">
+
+                <div class="project__image-caption">
+                    RESIDENCE 04
+                </div>
+
+            </div>
+
+            <div class="project__number">03</div>
+
+            <div class="project__info">
+
+                <span class="project__type">ГОРОДСКАЯ РЕЗИДЕНЦИЯ</span>
+
+                <h2>Residence 04</h2>
+
+                <p>
+                    Компактный объём, построенный
+                    вокруг внутреннего двора.
+                    Кирпич, штукатурка, дерево
+                    и глубокие архитектурные проёмы.
+                </p>
+
+                <div class="project__data">
+                    <span>СУРГУТ</span>
+                    <span>2026</span>
+                    <span>280 М²</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- MATERIALS -->
+        <section class="materials">
+
+            <div class="materials__header">
+
+                <div>
+                    <span>02 / МАТЕРИАЛЫ</span>
+                    <h2>
+                        Материал<br>
+                        определяет<br>
+                        <i>ощущение.</i>
+                    </h2>
+                </div>
+
+                <p>
+                    Мы не используем материалы
+                    как декорацию. Они становятся
+                    частью архитектурной логики.
+                </p>
+
+            </div>
+
+            <div class="materials__scene">
+
+                <img src="IMG_8731.png" alt="Материалы FORMA">
+
+                <div class="material-marker material-marker--stone">
+                    <span></span>
+                    <label>ИЗВЕСТНЯК</label>
+                </div>
+
+                <div class="material-marker material-marker--concrete">
+                    <span></span>
+                    <label>БЕТОН</label>
+                </div>
+
+                <div class="material-marker material-marker--wood">
+                    <span></span>
+                    <label>ТЁМНОЕ ДЕРЕВО</label>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- STUDIO -->
+        <section class="studio" id="studio">
+
+            <div class="studio__image">
+                <img src="IMG_8733.png" alt="Бюро FORMA">
+            </div>
+
+            <div class="studio__content">
+
+                <span>03 / БЮРО</span>
+
+                <h2>
+                    Мы проектируем<br>
+                    не здания.
+                </h2>
+
+                <p class="studio__statement">
+                    Мы проектируем среду,
+                    в которой архитектура
+                    становится частью жизни.
+                </p>
+
+                <p>
+                    FORMA — вымышленное архитектурное
+                    бюро из Сургута, созданное как
+                    концептуальный цифровой проект.
+                    Здесь нет случайных решений:
+                    от масштаба окна до фактуры камня
+                    всё подчинено одной пространственной идее.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- CONTACT -->
+        <section class="contact" id="contact">
+
+            <div class="contact__background">
+                <img src="IMG_8734.png" alt="">
+            </div>
+
+            <div class="contact__overlay"></div>
+
+            <div class="contact__content">
+
+                <span>ФИНАЛЬНАЯ ТОЧКА</span>
+
+                <h2>
+                    Пространство<br>
+                    должно
+                    <i>оставаться.</i>
+                </h2>
+
+                <a
+                    class="contact__button"
+                    href="https://vk.ru/id_aikharisov"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <span>Обсудить проект</span>
+                    <span class="button-dot"></span>
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <div class="footer__brand">
+            FORMA
         </div>
 
-        <div class="scroll">
-          SCROLL
-          <span></span>
+        <div class="footer__meta">
+            <span>СУРГУТ · РОССИЯ</span>
+            <span>ВЫМЫШЛЕННЫЙ ПРОЕКТ</span>
         </div>
 
-      </div>
-
-    </section>
-
-
-    <!-- PRINCIPLE -->
-
-    <section class="principle" id="principle">
-
-      <div class="section-index">
-        02 — PRINCIPLE
-      </div>
-
-      <div class="principle-grid">
-
-        <div class="principle-small">
-          FORMA / STUDIO
+        <div class="footer__author">
+            <img src="IMG_8735.png" alt="AIKharisov">
         </div>
 
-        <h1>
-          Мы создаём<br>
-          <em>не здания.</em><br>
-          Мы создаём<br>
-          <strong>состояния.</strong>
-        </h1>
+    </footer>
 
-        <p>
-          Архитектура начинается там,
-          где заканчивается необходимость
-          что-либо объяснять.
 
-          Форма, свет, материал и тишина
-          работают вместе.
-        </p>
+    <!-- POPUP -->
+    <aside class="project-popup" id="projectPopup">
 
-      </div>
-
-    </section>
-
-
-    <!-- PROJECTS -->
-
-    <section class="work" id="work">
-
-      <div class="section-head">
-
-        <div>
-          <span class="section-index">
-            01
-          </span>
-
-          <span>
-            SELECTED WORK
-          </span>
-        </div>
-
-        <span>
-          2024 — 2026
-        </span>
-
-      </div>
-
-
-      <!-- VILLA N -->
-
-      <article class="project project-villa">
-
-        <div class="project-image">
-          <img src="IMG_8721.png" alt="Villa N">
-        </div>
-
-        <div class="project-info">
-
-          <span>
-            01 / PRIVATE RESIDENCE
-          </span>
-
-          <h2>
-            VILLA <i>N</i>
-          </h2>
-
-          <div class="project-specs">
-            <span>412 M²</span>
-            <span>SURGUT</span>
-            <span>2026</span>
-          </div>
-
-          <p>
-            Монолитная композиция из камня,
-            бетона и дерева.
-
-            Дом собран вокруг света
-            и внутренней тишины.
-          </p>
-
-        </div>
-
-      </article>
-
-
-      <!-- VILLA INTERIOR -->
-
-      <article class="project project-interior">
-
-        <div class="project-image">
-          <img src="IMG_8725.png" alt="Villa N interior">
-        </div>
-
-        <div class="floating-label">
-          VILLA N / INTERIOR
-        </div>
-
-      </article>
-
-
-      <!-- HOUSE M -->
-
-      <article class="project project-house">
-
-        <div class="project-image">
-          <img src="IMG_8727.png" alt="House M">
-        </div>
-
-        <div class="project-info">
-
-          <span>
-            02 / PRIVATE HOUSE
-          </span>
-
-          <h2>
-            HOUSE <i>M</i>
-          </h2>
-
-          <div class="project-specs">
-            <span>286 M²</span>
-            <span>SURGUT</span>
-            <span>2026</span>
-          </div>
-
-          <p>
-            Горизонтальный объём,
-            природный кирпич и двор,
-            который становится частью
-            жилого пространства.
-          </p>
-
-        </div>
-
-      </article>
-
-
-      <!-- HOUSE M DETAILS -->
-
-      <article class="split-project">
-
-        <div class="split-image">
-          <img src="IMG_8728.png" alt="House M interior">
-        </div>
-
-        <div class="split-copy">
-
-          <span>
-            HOUSE M / 02
-          </span>
-
-          <p>
-            Интерьер продолжает архитектуру,
-            не конкурируя с ней.
-          </p>
-
-        </div>
-
-        <div class="split-image">
-          <img src="IMG_8729.png" alt="House M courtyard">
-        </div>
-
-      </article>
-
-
-      <!-- RESIDENCE 04 -->
-
-      <article class="project project-residence">
-
-        <div class="project-image">
-          <img src="IMG_8730.png" alt="Residence 04">
-        </div>
-
-        <div class="residence-caption">
-
-          <span>
-            03 / RESIDENCE 04
-          </span>
-
-          <h2>
-            VERTICAL<br>
-            <i>COURTYARD</i>
-          </h2>
-
-          <p>
-            Современная интерпретация
-            аркады и внутреннего двора.
-          </p>
-
-        </div>
-
-      </article>
-
-    </section>
-
-
-    <!-- MATERIALS -->
-
-    <section class="materials" id="materials">
-
-      <div class="materials-top">
-
-        <div class="section-index">
-          03 — MATERIAL
-        </div>
-
-        <h2>
-          Материал<br>
-          <em>определяет</em><br>
-          ощущение.
-        </h2>
-
-      </div>
-
-
-      <div class="material-image">
-
-        <img
-          src="IMG_8731.png"
-          alt="Материалы FORMA"
+        <button
+            class="project-popup__close"
+            id="popupClose"
+            aria-label="Закрыть"
         >
-
-        <div class="material-note note-1">
-          <b>01</b>
-          <span>ИЗВЕСТНЯК</span>
-        </div>
-
-        <div class="material-note note-2">
-          <b>02</b>
-          <span>БЕТОН</span>
-        </div>
-
-        <div class="material-note note-3">
-          <b>03</b>
-          <span>ДЕРЕВО</span>
-        </div>
-
-        <div class="material-note note-4">
-          <b>04</b>
-          <span>СТЕКЛО</span>
-        </div>
-
-      </div>
-
-
-      <div class="materials-foot">
-
-        <span>
-          NATURAL / TACTILE / TIMELESS
-        </span>
-
-        <span>
-          FORMA MATERIAL ARCHIVE
-        </span>
-
-      </div>
-
-    </section>
-
-
-    <!-- STUDIO -->
-
-    <section class="studio" id="studio">
-
-      <div class="studio-image">
-        <img
-          src="IMG_8733.png"
-          alt="Студия FORMA"
-        >
-      </div>
-
-      <div class="studio-shade"></div>
-
-      <div class="studio-content">
-
-        <span class="section-index">
-          04 — STUDIO
-        </span>
-
-        <h2>
-          Место,<br>
-          где <em>форма</em><br>
-          обретает смысл.
-        </h2>
-
-        <p>
-          Небольшое архитектурное бюро
-          в Сургуте.
-
-          Частные резиденции, интерьеры
-          и пространства, созданные
-          с вниманием к материалу,
-          свету и человеку.
-        </p>
-
-      </div>
-
-      <div class="studio-coords">
-        61°15′N / 73°24′E
-      </div>
-
-    </section>
-
-
-    <!-- ATMOSPHERE -->
-
-    <section class="atmosphere">
-
-      <img
-        src="IMG_8734.png"
-        alt="Атмосфера FORMA"
-      >
-
-      <div class="atmosphere-copy">
-
-        <span>
-          05 — ATMOSPHERE
-        </span>
-
-        <h2>
-          Архитектура<br>
-          <em>начинается</em><br>
-          с ощущения.
-        </h2>
-
-      </div>
-
-    </section>
-
-
-    <!-- CONTACT -->
-
-    <section class="contact" id="contact">
-
-      <div class="contact-top">
-
-        <span>
-          FORMA / CONTACT
-        </span>
-
-        <span>
-          SURGUT / RUSSIA
-        </span>
-
-      </div>
-
-
-      <div class="contact-main">
-
-        <span>
-          Есть пространство?
-        </span>
-
-        <h2>
-          Давайте<br>
-          <em>придадим</em><br>
-          ему форму.
-        </h2>
-
-        <button id="openModal">
-          ОБСУДИТЬ ПРОЕКТ
-          <span>↗</span>
+            ×
         </button>
 
-      </div>
+        <span>AIKHARISOV</span>
+
+        <strong>
+            Нужен сайт<br>
+            с таким характером?
+        </strong>
+
+        <p>
+            Разрабатываю нестандартные
+            сайты под конкретный проект.
+        </p>
+
+        <a
+            href="https://vk.ru/id_aikharisov"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Обсудить проект
+        </a>
+
+    </aside>
 
 
-      <div class="contact-bottom">
-
-        <span>
-          ARCHITECTURE / INTERIOR / SPACE
-        </span>
-
-        <span>
-          FORMA © 2026
-        </span>
-
-      </div>
-
-    </section>
-
-  </main>
-
-
-  <!-- FLOATING CTA -->
-
-  <aside class="floating-cta" id="floatingCta">
-
-    <button
-      class="cta-close"
-      id="ctaClose"
-      aria-label="Закрыть"
-    >
-      ×
-    </button>
-
-    <span>
-      WEB / AIKHARISOV
-    </span>
-
-    <strong>
-      Нужен сайт<br>
-      <em>с характером?</em>
-    </strong>
-
-    <p>
-      Создаю нестандартные сайты,
-      где визуал становится частью идеи.
-    </p>
-
-    <a
-      href="https://vk.ru/id_aikharisov"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      ОБСУДИТЬ САЙТ ↗
-    </a>
-
-  </aside>
-
-
-  <!-- MODAL -->
-
-  <div class="modal" id="modal">
-
-    <div class="modal-inner">
-
-      <button
-        class="modal-close"
-        id="modalClose"
-      >
-        ×
-      </button>
-
-      <span>
-        FORMA / PROJECT
-      </span>
-
-      <h2>
-        Расскажите,<br>
-        <em>что нужно создать.</em>
-      </h2>
-
-      <a
-        href="https://vk.ru/id_aikharisov"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        НАПИСАТЬ В VK ↗
-      </a>
-
-    </div>
-
-  </div>
-
-
-  <footer>
-
-    <span>
-      FORMA / ARCHITECTURE
-    </span>
-
-    <span>
-      Вымышленный проект для портфолио AIKharisov.
-      Все названия, объекты и описания вымышлены.
-      Любые совпадения с реальными компаниями,
-      объектами или людьми случайны.
-    </span>
-
-  </footer>
-
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
