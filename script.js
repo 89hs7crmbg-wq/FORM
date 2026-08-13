@@ -1,48 +1,51 @@
+/* =========================================
+   FORMA
+   Main interaction system
+========================================= */
+
 document.addEventListener("DOMContentLoaded", () => {
 
-    /*
-    ============================================
-    LOADER
-    ============================================
-    */
+    document.body.classList.add("is-loading");
+
+
+    /* =========================================
+       LOADER
+    ========================================= */
 
     const loader = document.getElementById("loader");
-
-    document.body.classList.add("loading");
 
     let loaderFinished = false;
 
     function finishLoader() {
 
-        if (loaderFinished) return;
+        if (loaderFinished || !loader) {
+            return;
+        }
 
         loaderFinished = true;
 
-        setTimeout(() => {
+        loader.classList.add("is-hidden");
+        document.body.classList.remove("is-loading");
 
-            loader.classList.add("is-hidden");
-            document.body.classList.remove("loading");
-
-        }, 350);
+        window.setTimeout(() => {
+            if (loader && loader.parentNode) {
+                loader.remove();
+            }
+        }, 900);
     }
 
-    window.addEventListener("load", finishLoader);
-
     /*
-    Fallback.
-    Если какое-то изображение решит провести
-    самостоятельную забастовку, сайт всё равно
-    должен открыться.
-    */
+     * Loader намеренно не зависит от window.load.
+     * Изображения сайта могут грузиться сколько угодно,
+     * но экран загрузки заканчивается самостоятельно.
+     */
 
-    setTimeout(finishLoader, 2600);
+    window.setTimeout(finishLoader, 2300);
 
 
-    /*
-    ============================================
-    CUSTOM CURSOR
-    ============================================
-    */
+    /* =========================================
+       CUSTOM CURSOR
+    ========================================= */
 
     const cursor = document.getElementById("cursor");
 
@@ -59,9 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
             mouseX = event.clientX;
             mouseY = event.clientY;
 
-        });
+        }, { passive: true });
 
-        function updateCursor() {
+
+        function renderCursor() {
 
             currentX += (mouseX - currentX) * 0.18;
             currentY += (mouseY - currentY) * 0.18;
@@ -69,18 +73,17 @@ document.addEventListener("DOMContentLoaded", () => {
             cursor.style.left = `${currentX}px`;
             cursor.style.top = `${currentY}px`;
 
-            requestAnimationFrame(updateCursor);
-
+            requestAnimationFrame(renderCursor);
         }
 
-        updateCursor();
+        renderCursor();
 
 
-        const hoverTargets = document.querySelectorAll(
-            "a, button, .project__visual, .materials__scene"
+        const interactiveElements = document.querySelectorAll(
+            "a, button, .material-point"
         );
 
-        hoverTargets.forEach((element) => {
+        interactiveElements.forEach((element) => {
 
             element.addEventListener("mouseenter", () => {
                 cursor.classList.add("is-hover");
@@ -91,35 +94,45 @@ document.addEventListener("DOMContentLoaded", () => {
             });
 
         });
-
     }
 
 
-    /*
-    ============================================
-    SMOOTH INTERNAL LINKS
-    ============================================
-    */
+    /* =========================================
+       INTERNAL LINKS
+    ========================================= */
 
-    const links = document.querySelectorAll('a[href^="#"]');
+    const internalLinks = document.querySelectorAll(
+        'a[href^="#"]'
+    );
 
-    links.forEach((link) => {
+    internalLinks.forEach((link) => {
 
         link.addEventListener("click", (event) => {
 
             const targetId = link.getAttribute("href");
 
-            if (!targetId || targetId === "#") return;
+            if (!targetId || targetId === "#") {
+                return;
+            }
 
             const target = document.querySelector(targetId);
 
-            if (!target) return;
+            if (!target) {
+                return;
+            }
 
             event.preventDefault();
 
-            target.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
+            const headerOffset = 70;
+
+            const targetPosition =
+                target.getBoundingClientRect().top +
+                window.scrollY -
+                headerOffset;
+
+            window.scrollTo({
+                top: targetPosition,
+                behavior: "smooth"
             });
 
         });
@@ -127,55 +140,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    /*
-    ============================================
-    REVEAL ELEMENTS
-    ============================================
-    */
-
-    const revealElements = document.querySelectorAll(
-        ".project__info, .detail-text, .materials__header, .studio__content, .contact__content"
-    );
-
-    revealElements.forEach((element) => {
-        element.classList.add("reveal");
-    });
-
-    const revealObserver = new IntersectionObserver(
-        (entries) => {
-
-            entries.forEach((entry) => {
-
-                if (entry.isIntersecting) {
-
-                    entry.target.classList.add("is-visible");
-
-                    revealObserver.unobserve(entry.target);
-
-                }
-
-            });
-
-        },
-        {
-            threshold: 0.12
-        }
-    );
-
-    revealElements.forEach((element) => {
-        revealObserver.observe(element);
-    });
-
-
-    /*
-    ============================================
-    PARALLAX
-    ============================================
-    */
+    /* =========================================
+       PARALLAX
+    ========================================= */
 
     const parallaxImages = document.querySelectorAll(
-        ".project__visual img, .detail-image img, .house-experience__image img, .materials__scene img"
+        ".parallax-image"
     );
+
+    let ticking = false;
 
     function updateParallax() {
 
@@ -186,145 +159,131 @@ document.addEventListener("DOMContentLoaded", () => {
             const rect = image.getBoundingClientRect();
 
             if (
-                rect.bottom < 0 ||
-                rect.top > viewportHeight
+                rect.bottom < -100 ||
+                rect.top > viewportHeight + 100
             ) {
                 return;
             }
 
-            const center = rect.top + rect.height / 2;
-            const distance = center - viewportHeight / 2;
+            const center =
+                rect.top + rect.height / 2;
 
-            const movement = distance * -0.025;
+            const distance =
+                (center - viewportHeight / 2) /
+                viewportHeight;
+
+            const offset =
+                distance * -28;
 
             image.style.transform =
-                `translateY(${movement}px) scale(1.025)`;
+                `translate3d(0, ${offset}px, 0)`;
 
         });
 
+        ticking = false;
     }
 
-    let parallaxTicking = false;
+    function requestParallax() {
 
-    window.addEventListener("scroll", () => {
+        if (!ticking) {
 
-        if (!parallaxTicking) {
+            requestAnimationFrame(updateParallax);
 
-            window.requestAnimationFrame(() => {
-
-                updateParallax();
-
-                parallaxTicking = false;
-
-            });
-
-            parallaxTicking = true;
+            ticking = true;
         }
+    }
 
-    }, { passive: true });
+    if (
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+
+        window.addEventListener(
+            "scroll",
+            requestParallax,
+            { passive: true }
+        );
+
+        window.addEventListener(
+            "resize",
+            requestParallax,
+            { passive: true }
+        );
+
+        requestParallax();
+    }
 
 
-    /*
-    ============================================
-    MATERIAL MARKERS
-    ============================================
-    */
+    /* =========================================
+       REVEAL SYSTEM
+    ========================================= */
 
-    const materialScene = document.querySelector(".materials__scene");
+    const revealElements = document.querySelectorAll(
+        ".manifesto__main, " +
+        ".projects-intro__content, " +
+        ".project__statement, " +
+        ".project__details, " +
+        ".house-grid__text, " +
+        ".house-interior__caption, " +
+        ".house-yard__caption, " +
+        ".residence__intro, " +
+        ".materials__heading, " +
+        ".studio__content, " +
+        ".contact__main"
+    );
 
-    if (materialScene) {
+    revealElements.forEach((element) => {
+        element.classList.add("reveal");
+    });
 
-        const markers = materialScene.querySelectorAll(".material-marker");
 
-        materialScene.addEventListener("mousemove", (event) => {
+    const revealObserver = new IntersectionObserver(
+        (entries, observer) => {
 
-            const rect = materialScene.getBoundingClientRect();
+            entries.forEach((entry) => {
 
-            const x = (event.clientX - rect.left) / rect.width;
-            const y = (event.clientY - rect.top) / rect.height;
+                if (!entry.isIntersecting) {
+                    return;
+                }
 
-            markers.forEach((marker, index) => {
+                entry.target.classList.add("is-visible");
 
-                const strength = (index + 1) * 3;
-
-                marker.style.transform =
-                    `translate(${(x - .5) * strength}px, ${(y - .5) * strength}px)`;
+                observer.unobserve(entry.target);
 
             });
 
-        });
-
-        materialScene.addEventListener("mouseleave", () => {
-
-            markers.forEach((marker) => {
-
-                marker.style.transform = "translate(0, 0)";
-
-            });
-
-        });
-
-    }
+        },
+        {
+            threshold: 0.12,
+            rootMargin: "0px 0px -5% 0px"
+        }
+    );
 
 
-    /*
-    ============================================
-    POPUP
-    ============================================
-    */
-
-    const popup = document.getElementById("projectPopup");
-    const popupClose = document.getElementById("popupClose");
-
-    const popupWasClosed =
-        sessionStorage.getItem("formaPopupClosed") === "true";
-
-    if (popup && !popupWasClosed) {
-
-        setTimeout(() => {
-
-            popup.classList.add("is-visible");
-
-        }, 9000);
-
-    }
-
-    if (popupClose && popup) {
-
-        popupClose.addEventListener("click", () => {
-
-            popup.classList.remove("is-visible");
-
-            sessionStorage.setItem(
-                "formaPopupClosed",
-                "true"
-            );
-
-        });
-
-    }
+    revealElements.forEach((element) => {
+        revealObserver.observe(element);
+    });
 
 
-    /*
-    ============================================
-    HIDE POPUP WHEN CONTACT IS VISIBLE
-    ============================================
-    */
+    /* =========================================
+       TRANSITIONS
+    ========================================= */
 
-    const contactSection = document.querySelector(".contact");
+    const transitionSections =
+        document.querySelectorAll(".transition");
 
-    if (contactSection && popup) {
-
-        const contactObserver = new IntersectionObserver(
-            (entries) => {
+    const transitionObserver =
+        new IntersectionObserver(
+            (entries, observer) => {
 
                 entries.forEach((entry) => {
 
-                    if (entry.isIntersecting) {
-
-                        popup.classList.remove("is-visible");
-
+                    if (!entry.isIntersecting) {
+                        return;
                     }
+
+                    entry.target.classList.add("is-visible");
+
+                    observer.unobserve(entry.target);
 
                 });
 
@@ -334,17 +293,202 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         );
 
-        contactObserver.observe(contactSection);
+
+    transitionSections.forEach((section) => {
+        transitionObserver.observe(section);
+    });
+
+
+    /* =========================================
+       MATERIAL INTERACTION
+    ========================================= */
+
+    const materialPoints =
+        document.querySelectorAll(".material-point");
+
+    materialPoints.forEach((point) => {
+
+        const button =
+            point.querySelector("button");
+
+        if (!button) {
+            return;
+        }
+
+        button.addEventListener("click", (event) => {
+
+            event.stopPropagation();
+
+            const alreadyActive =
+                point.classList.contains("is-active");
+
+            materialPoints.forEach((otherPoint) => {
+                otherPoint.classList.remove("is-active");
+            });
+
+            if (!alreadyActive) {
+                point.classList.add("is-active");
+            }
+
+        });
+
+    });
+
+
+    document.addEventListener("click", () => {
+
+        materialPoints.forEach((point) => {
+            point.classList.remove("is-active");
+        });
+
+    });
+
+
+    /* =========================================
+       POPUP
+    ========================================= */
+
+    const popup =
+        document.getElementById("projectPopup");
+
+    const popupClose =
+        document.getElementById("popupClose");
+
+    const popupStorageKey =
+        "forma_project_popup_closed";
+
+
+    function showPopup() {
+
+        if (!popup) {
+            return;
+        }
+
+        if (
+            sessionStorage.getItem(popupStorageKey) === "true"
+        ) {
+            return;
+        }
+
+        popup.classList.add("is-visible");
+    }
+
+
+    function hidePopup() {
+
+        if (!popup) {
+            return;
+        }
+
+        popup.classList.remove("is-visible");
+
+        sessionStorage.setItem(
+            popupStorageKey,
+            "true"
+        );
+    }
+
+
+    if (popupClose) {
+
+        popupClose.addEventListener(
+            "click",
+            hidePopup
+        );
 
     }
 
 
-    /*
-    ============================================
-    INITIAL PARALLAX
-    ============================================
-    */
+    window.setTimeout(() => {
 
-    updateParallax();
+        if (
+            sessionStorage.getItem(
+                popupStorageKey
+            ) !== "true"
+        ) {
+            showPopup();
+        }
+
+    }, 9000);
+
+
+    /* =========================================
+       HIDE POPUP NEAR CONTACT
+    ========================================= */
+
+    const contact =
+        document.getElementById("contact");
+
+    if (contact && popup) {
+
+        const popupObserver =
+            new IntersectionObserver(
+                (entries) => {
+
+                    entries.forEach((entry) => {
+
+                        if (entry.isIntersecting) {
+                            popup.classList.remove(
+                                "is-visible"
+                            );
+                        }
+
+                    });
+
+                },
+                {
+                    threshold: 0.2
+                }
+            );
+
+        popupObserver.observe(contact);
+    }
+
+
+    /* =========================================
+       IMAGE LOAD SAFETY
+    ========================================= */
+
+    const images =
+        document.querySelectorAll("img");
+
+    images.forEach((image) => {
+
+        image.addEventListener(
+            "error",
+            () => {
+
+                image.classList.add(
+                    "image-load-error"
+                );
+
+            },
+            { once: true }
+        );
+
+    });
+
+
+    /* =========================================
+       RESIZE STATE
+    ========================================= */
+
+    let resizeTimer;
+
+    window.addEventListener(
+        "resize",
+        () => {
+
+            clearTimeout(resizeTimer);
+
+            resizeTimer = setTimeout(() => {
+
+                requestParallax();
+
+            }, 150);
+
+        },
+        { passive: true }
+    );
 
 });
